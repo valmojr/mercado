@@ -84,14 +84,74 @@ int main () {
 
         if (option == 3)
         {
-            char soun;
-            cout << "Deseja cadastrar um novo produto? (s/n)\n";
+            char soun='n';
+            cout << "\nDeseja realizar um pedido? (s/n)\n";
             cin >> soun;
-            if (soun == 's') {
+            while (soun == 's')
+            {
                 order_id_count++;
                 orders[order_id_count].setID(order_id_count);
+                while (soun != 'n') {
+                    cout << "Deseja adicionar algum item ao pedido? (s/n)\n";
+                    cin >> soun;
+                    if (soun == 's') {
+                        system("cls");
+                        cout << "=====ESTOQUE=====\n";
+                        cout << "ID - NOME - VALOR - QTD\n";
+                        for (int i = 1; i < product_id_count+1; i++) {
+                            cout << products[i].getID() << ". " << products[i].getName() << " - " << products[i].getPrice()<< " - " << products[i].getEstoque() << "\n";
+                        };
+                        cout << "Qual produto deseja adicionar ao pedido?\n";
+                        int itemselect=0;
+                        cin >> itemselect;
+                        cout << "Qual a quantidade de " << products[itemselect].getName() << " que deseja? Temos " << products[itemselect].getEstoque() << " em estoque\n";
+                        int itemselectqtd=0;
+                        cin >> itemselectqtd;
+                        if (itemselectqtd <= products[itemselect].getEstoque()) {
+                            products[itemselect].setEstoque(products[itemselect].getEstoque()-itemselectqtd);
+                            orders[order_id_count].setValor(orders[order_id_count].getValor()+(products[itemselect].getPrice()*itemselectqtd));
+                            orders[order_id_count].setItens(orders[order_id_count].getItens()+to_string(products[itemselect].getID())+" - "+products[itemselect].getName()+" - "+to_string(itemselectqtd)+"\n");
+                        } else {
+                            cout << "Quantidade indisponivel\n";
+                        }
+                    }
+                }
+                system("cls");
+                cout << orders[order_id_count].getItens();
+                cout << "\nTotal a pagar: R$" << orders[order_id_count].getValor() << "\n Qual a forma de pagamento?\n";
+                cout << "1. Dinheiro\n";
+                cout << "2. Cartao\n";
+                cout << "3. Cheque\n";
+                int pag;
+                cin >> pag;
+                switch (pag)
+                {
+                case 1:
+                    orders[order_id_count].setPagamento("dinheiro");
+                    orders[order_id_count].setPago(true);
+                    break;
+                case 2:
+                    orders[order_id_count].setPagamento("cartao");
+                    orders[order_id_count].setPago(true);
+                    break;
+                case 3:
+                    orders[order_id_count].setPagamento("cheque");
+                    orders[order_id_count].setPago(true);
+                    break;
+                
+                default:
+                    orders[order_id_count].setPago(false);
+                    break;
+                }
+                if (orders[order_id_count].getPago())
+                {
+                    system("cls");
+                    orders[order_id_count].gerarNotaFiscal();
+                }
+                char soun;
+                cout << "\nContinuar? (s/n)\n";
+                cin >> soun;
             }
-            
             system("cls");
         };
 

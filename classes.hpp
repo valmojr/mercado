@@ -106,6 +106,7 @@ class order {
         int id = 0;
         double valor = 0;
         string pagamento = "nenhum";
+		string itens = "";
         bool pago = false;
     public:
         order();
@@ -114,11 +115,13 @@ class order {
         void setValor(double v);
         void setPagamento(string p);
         void setPago(bool pg);
+		void setItens(string i);
         int getID();
         int getValor();
         string getPagamento();
         bool getPago();
-        string gerarNotaFiscal();
+		string getItens();
+        void gerarNotaFiscal();
 };
 
 order::order() {};
@@ -137,6 +140,9 @@ void order::setPagamento(string p) {
 void order::setPago(bool pg) {
     pago = pg;
 };
+void order::setItens(string i){
+	itens = i;
+};
 int order::getID() {
     return id;
 };
@@ -149,7 +155,18 @@ string order::getPagamento() {
 bool order::getPago() {
     return pago;
 };
-string order::gerarNotaFiscal() {
-    cout << "=== NOTA FISCAL ===";
-    return "nota fiscal";
+string order::getItens() {
+	return itens;
+}
+void order::gerarNotaFiscal() {
+    cout << "===== NFE =====\n";
+	cout << "Pedido Nr " << id << "\n";
+	cout << itens;
+	cout << "Valor Total: R$" << valor << "\n";
+	cout << "Status: ";
+	if (pago) {
+		cout << "Pago em " << pagamento << "\n";
+	} else {
+		cout << "A quitar\n";
+	}
 };
